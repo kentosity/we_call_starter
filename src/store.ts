@@ -1,15 +1,50 @@
-import { defineStore } from 'pinia';
+import { _GettersTree, defineStore } from "pinia";
 
-export const useStore = defineStore('main', {
-    state: () => ({
-        count: 0,
-    }),
-    actions: {
-        increment() {
-            this.count++;
-        },
-    },
-    getters: {
-        doubleCount: (state) => state.count * 2,
-    },
+interface StateInterface {
+  surname: string;
+  name: string;
+  surnameKana: string;
+  nameKana: string;
+  gender: string;
+  year: number;
+  month: number;
+  date: number;
+  todoufuken: string;
+  address: string;
+  email: string;
+}
+
+interface StoreGetters extends _GettersTree<StateInterface> {
+  stringed: (state: StateInterface) => string;
+}
+
+interface StoreActions {
+  submit: () => void;
+}
+
+export const useStore = defineStore<
+  string,
+  StateInterface,
+  StoreGetters,
+  StoreActions
+>("main", {
+  state: () => ({
+    surname: "",
+    name: "",
+    surnameKana: "",
+    nameKana: "",
+    gender: "",
+    year: 2000,
+    month: 1,
+    date: 1,
+    todoufuken: "",
+    address: "",
+    email: "",
+  }),
+  actions: {
+    submit() {},
+  },
+  getters: {
+    stringed: () => "",
+  },
 });
