@@ -3,12 +3,12 @@ import Input from './components/Input.vue'
 import Submit from './components/Submit.vue'
 import Caution from './components/Caution.vue'
 
-import todoufuken from './assets/todoufuken'
+import prefectures from './assets/prefectures'
 
 import { useStore } from './store';
 const st = useStore()
 
-function handleSubmit() {
+function handleFormInput() {
   const str = JSON.stringify(st.$state, null, 2)
   alert(str)
 }
@@ -65,11 +65,9 @@ function handleSubmit() {
 
     <div class="row">
       <label for="state">都道府県</label>
-      <select v-model="st.todoufuken" id="state" name="state">
-        <option v-for="(it, ix) in todoufuken" :value="it" :key="ix">{{ it }}</option>
+      <select v-model="st.prefecture" id="state" name="state">
+        <option v-for="(prefecture, ix) in prefectures" :value="prefecture" :key="ix">{{ prefecture }}</option>
       </select>
-
-
     </div>
 
     <div class="row">
@@ -82,6 +80,6 @@ function handleSubmit() {
 
     <Caution :msg="'本イベントに関して、ご連絡させていただく可能性がございます。'" />
 
-    <Submit @submit="handleSubmit" />
+    <Submit @submit="handleFormInput" />
   </form>
 </template>

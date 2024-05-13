@@ -9,7 +9,7 @@ export interface StateInterface {
   year: number;
   month: number;
   date: number;
-  todoufuken: string;
+  prefecture: string;
   address: string;
   email: string;
 }
@@ -37,7 +37,7 @@ export const useStore = defineStore<
     year: 2000,
     month: 1,
     date: 1,
-    todoufuken: "",
+    prefecture: "",
     address: "",
     email: "",
   }),
