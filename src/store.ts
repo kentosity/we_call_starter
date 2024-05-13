@@ -1,6 +1,6 @@
 import { _GettersTree, defineStore } from "pinia";
 
-interface StateInterface {
+export interface StateInterface {
   surname: string;
   name: string;
   surnameKana: string;

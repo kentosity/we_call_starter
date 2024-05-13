@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Input from './components/Input.vue'
 import Submit from './components/Submit.vue'
 import Caution from './components/Caution.vue'
 
@@ -25,25 +26,13 @@ function handleSubmit() {
 
   <form>
     <div class="row two-col">
-      <div>
-        <label for="surname">姓</label>
-        <input v-model="st.surname" id="surname" type="text">
-      </div>
-      <div>
-        <label for="name">名</label>
-        <input v-model="st.name" id="name" type="text">
-      </div>
+      <Input id="surname" label="姓" type="text" :model="'surname'" />
+      <Input id="name" label="名" type="text" :model="'name'" />
     </div>
 
     <div class="row two-col">
-      <div>
-        <label for="surname-kana">セイ</label>
-        <input v-model="st.surnameKana" id="surname-kana" type="text">
-      </div>
-      <div>
-        <label for="name-kana">メイ</label>
-        <input v-model="st.nameKana" id="name-kana" type="text">
-      </div>
+      <Input id="surname-kana" label="セイ" type="text" :model="'surnameKana'" />
+      <Input id="surname-mei" label="メイ" type="text" :model="'nameKana'" />
     </div>
 
     <div class="row">
@@ -63,11 +52,11 @@ function handleSubmit() {
     <div class="row">
       <p class="alt-label">生年月日</p>
       <div class="inline-inputs">
-        <input v-model="st.year" type="number" name="year" value="" />
+        <Input id="year" type="number" :model="'year'" />
         <span>年</span>
-        <input v-model="st.month" type="number" name="month" value="" />
+        <Input id="month" type="number" :model="'month'" />
         <span>月</span>
-        <input v-model="st.date" type="number" name="date" value="" />
+        <Input id="date" type="number" :model="'date'" />
         <span>日</span>
       </div>
     </div>
@@ -126,13 +115,11 @@ function handleSubmit() {
     </div>
 
     <div class="row">
-      <label for="address">住所</label>
-      <input v-model="st.address" id="address" name="address" type="text">
+      <Input id="address" label="住所" type="text" :model="'address'" />
     </div>
 
     <div class="row">
-      <label for="email">メールアドレス</label>
-      <input v-model="st.email" id="email" name="email" type="email" placeholder="メアド">
+      <Input id="email" label="メールアドレス" type="email" :model="'email'" />
     </div>
 
     <Caution :msg="'本イベントに関して、ご連絡させていただく可能性がございます。'" />
