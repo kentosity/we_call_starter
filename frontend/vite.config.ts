@@ -6,5 +6,13 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     host: true,
+    proxy: {
+      "/api": {
+        target: process.env.BACKEND_API_URL,
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/proxy/, ""),
+      },
+    },
   },
 });

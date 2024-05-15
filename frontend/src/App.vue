@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import axios from 'axios'
+
 import Input from './components/Input.vue'
 import Submit from './components/Submit.vue'
 import Caution from './components/Caution.vue'
@@ -8,9 +10,15 @@ import prefectures from './assets/prefectures'
 import { useStore } from './store';
 const st = useStore()
 
-function handleFormInput() {
-  const str = JSON.stringify(st.$state, null, 2)
-  alert(str)
+async function handleFormInput() {
+  const cState = st.$state
+  const birthday = `${cState.year}-${cState.month}-${cState.date}`
+
+  const res = await axios.post('/api/entries', {
+    ...cState,
+    birthday
+  })
+  alert(res)
 }
 </script>
 
