@@ -13,11 +13,11 @@ const router = useRouter()
 const st = useStore()
 
 async function handleFormInput() {
-    const cState = st.$state
-    const birthday = `${cState.year}-${cState.month}-${cState.date}`
+    const currentState = st.$state
+    const birthday = `${currentState.year}-${currentState.month}-${currentState.date}`
 
     const res = await axios.post('/api/entries', {
-        ...cState,
+        ...currentState,
         birthday
     })
 
