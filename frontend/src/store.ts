@@ -22,7 +22,7 @@ interface StoreActions {
   submit: () => void;
 }
 
-export const useStore = defineStore<
+export const useFormStore = defineStore<
   string,
   StateInterface,
   StoreGetters,
