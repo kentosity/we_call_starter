@@ -2,18 +2,18 @@
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-import NameInput from '../formElements/NameInput.vue'
-import NameKanaInput from '../formElements/NameKanaInput.vue'
-import GenderInput from '../formElements/GenderInput.vue'
-import BirthdayInput from '../formElements/BirthdayInput.vue'
-import PrefectureInput from '../formElements/PrefectureInput.vue'
-import AddressInput from '../formElements/AddressInput.vue'
-import EmailInput from '../formElements/EmailInput.vue'
+import NameInput from '@/components/formElements/NameInput.vue'
+import NameKanaInput from '@/components/formElements/NameKanaInput.vue'
+import GenderInput from '@/components/formElements/GenderInput.vue'
+import BirthdayInput from '@/components/formElements/BirthdayInput.vue'
+import PrefectureInput from '@/components/formElements/PrefectureInput.vue'
+import AddressInput from '@/components/formElements/AddressInput.vue'
+import EmailInput from '@/components/formElements/EmailInput.vue'
 
-import Caution from '../Caution.vue'
-import Submit from '../Submit.vue'
+import Caution from '@/components/Caution.vue'
+import Submit from '@/components/Submit.vue'
 
-import { useFormStore } from '../../stores/registrationFormStore';
+import { useFormStore } from '@/stores/registrationFormStore';
 const router = useRouter()
 const formStore = useFormStore()
 
