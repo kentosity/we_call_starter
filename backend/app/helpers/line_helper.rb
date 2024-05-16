@@ -11,15 +11,16 @@ module LineHelper
     end
 
     # https://developers.line.biz/ja/docs/line-login/managing-users/#get-profile
-    def get_profile_from_access_token(lineAccessToken)
+    def get_user_id_from_access_token(lineAccessToken)
         url = "https://api.line.me/v2/profile"
         header = { Authorization: "Bearer #{lineAccessToken}" }
 
         client = HTTPClient.new
         response = client.get(url, header: header)
         jsoned_body = JSON.parse(response.body)
+        user_id = jsoned_body['userId'] # user_id could be nil
 
-        return jsoned_body['userId']
+        return user_id
     end 
 
     
