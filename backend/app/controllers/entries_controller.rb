@@ -2,7 +2,7 @@ require 'json'
 include LineHelper
 
 class EntriesController < ApplicationController
-  before_action :validate_user, only: [:create, :update, :destroy]
+  before_action :validate_user, only: [:show, :create, :update, :destroy]
   before_action :find_entry_by_recepient_id, only: [:show, :update, :destroy]
 
   def show
