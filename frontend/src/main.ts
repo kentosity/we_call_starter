@@ -4,9 +4,16 @@ import { router } from "@/router";
 
 import App from "@/App.vue";
 import "@/style.css";
+import { authorizeWithLine } from "./helpers/lineAuthentication";
 
 const app = createApp(App);
 
-app.use(createPinia());
-app.use(router);
-app.mount("#app");
+const initApplication = async () => {
+  await authorizeWithLine();
+
+  app.use(createPinia());
+  app.use(router);
+  app.mount("#app");
+};
+
+initApplication();

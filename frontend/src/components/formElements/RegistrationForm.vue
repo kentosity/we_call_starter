@@ -14,16 +14,20 @@ import Caution from '@/components/Caution.vue'
 import Submit from '@/components/Submit.vue'
 
 import { useFormStore } from '@/stores/registrationFormStore';
+import { getLineProfile } from '@/helpers/lineAuthentication'
 const router = useRouter()
 const formStore = useFormStore()
 
 async function handleFormInput() {
+    const profile = await getLineProfile()
+
     const currentState = formStore.$state
     const birthday = `${currentState.year}-${currentState.month}-${currentState.date}`
 
     const res = await axios.post('/api/entries', {
+        uid: profile.userId,
         ...currentState,
-        birthday
+        birthday,
     })
 
     router.push({ path: '/result', query: res.data })
