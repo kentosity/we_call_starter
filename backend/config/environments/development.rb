@@ -78,5 +78,6 @@ Rails.application.configure do
 
   # To allow requests to these hosts, make sure they are valid hostnames (containing only numbers, letters, dashes and dots), then add the following to your environment configuration:
   # 上記に対する対応
-  config.hosts << 'backend:3000'
+  # Ngrokも対応(ngrok-freeでも対応可能)
+  config.hosts << /(.+\.ngrok.+\..+)|(backend:3000)/
 end
