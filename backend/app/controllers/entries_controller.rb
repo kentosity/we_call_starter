@@ -34,6 +34,7 @@ class EntriesController < ApplicationController
     end
 
     if @entry.update(entry_params)
+      notify_user_of_change(@entry)
       render json: @entry, status: :ok
     else
       render json: @entry.errors, status: :unprocessable_entity

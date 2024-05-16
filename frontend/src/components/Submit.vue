@@ -3,5 +3,5 @@ const emit = defineEmits(['submit'])
 </script>
 
 <template>
-    <button @click.prevent="emit('submit')">来場日時の選択へ</button>
+    <button @click.prevent="emit('submit')">上記の内容で登録</button>
 </template>

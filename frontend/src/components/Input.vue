@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { RegistrationFormState, useFormStore } from '@/stores/registrationFormStore';
+import { useFormStore } from '@/stores/registrationFormStore';
+import { RegistrationFormState } from '@/types';
 
 const props = defineProps<{
     id: string

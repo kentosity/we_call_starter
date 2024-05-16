@@ -11,3 +11,7 @@ export interface RegistrationFormState {
   address: string;
   email: string;
 }
+
+export interface RegistrationFormAction {
+  updateData: (newData: RegistrationFormState) => void;
+}

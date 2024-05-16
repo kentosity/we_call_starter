@@ -1,4 +1,4 @@
-import { RegistrationFormState } from "@/types";
+import { RegistrationFormAction, RegistrationFormState } from "@/types";
 import { defineStore } from "pinia";
 
 const defaultFormValue: RegistrationFormState = {
@@ -15,9 +15,16 @@ const defaultFormValue: RegistrationFormState = {
   email: "",
 };
 
-export const useFormStore = defineStore<string, RegistrationFormState>(
-  "registrationForm",
-  {
-    state: () => defaultFormValue,
-  }
-);
+export const useFormStore = defineStore<
+  string,
+  RegistrationFormState,
+  {},
+  RegistrationFormAction
+>("registrationForm", {
+  state: () => defaultFormValue,
+  actions: {
+    updateData(newData) {
+      this.$state = { ...this.$state, ...newData };
+    },
+  },
+});
