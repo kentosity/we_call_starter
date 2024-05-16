@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_16_041957) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_16_071345) do
   create_table "entries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "surname"
     t.string "name"
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_16_041957) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uid"
+    t.index ["uid"], name: "index_entries_on_uid", unique: true
   end
 
 end
