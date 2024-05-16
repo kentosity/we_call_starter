@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import prefectures from '../../assets/prefectures'
-import { useFormStore } from '../../stores/registrationFormStore';
+import { useFormStore } from '@/stores/registrationFormStore'
+import prefectures from '@/assets/prefectures'
 import Row from './FormRow.vue'
 
 const formStore = useFormStore()
