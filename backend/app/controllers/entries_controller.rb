@@ -1,3 +1,4 @@
+require 'json'
 include LineHelper
 
 class EntriesController < ApplicationController
@@ -15,8 +16,14 @@ class EntriesController < ApplicationController
 
   def create
     @entry = Entry.new(entry_params.merge(uid: @line_recepient_id))
-    if save_entry_with_message
-      render status: :created, json: @entry
+    
+
+    begin
+      @entry.save!
+      notify_user_of_change(@entry)
+      render json: @entry, status: :ok
+    rescue ActiveRecord::RecordInvalid => invalid
+      render json: invalid.record.errors, status: :unprocessable_entity
     end
   end
 
@@ -77,24 +84,16 @@ class EntriesController < ApplicationController
       @entry = Entry.find_by(uid: @line_recepient_id)
     end
 
-    def save_entry_with_message
-      begin
-        @entry.save!
+    def notify_user_of_change(json_data)
+      fullname = "#{json_data.surname} #{json_data.name}"
+      entry_attributes = json_data.attributes.slice('id', 'surname', 'name', 'surnameKana', 'nameKana', 'gender', 'birthday', 'prefecture', 'address', 'email')
+      entry_string = entry_attributes.map { |key, value| "#{key}: #{value}" }.join("\n")
+      message = {
+        type: 'text',
+        text: "#{fullname}様に新しいお知らせです。\nお問い合わせを受け付けました!\n\n#{entry_string}"
+      }
   
-        fullname = "#{@entry.surname} #{@entry.name}"
-        message = {
-          type: 'text',
-          text: "#{fullname}様\n\nお問い合わせを受け付けました!"
-        }
-  
-        line_client = get_line_bot_client
-        response = line_client.push_message(@line_recepient_id, message)
-    
-        render status: :created, json: @entry
-        true
-      rescue ActiveRecord::RecordInvalid => invalid
-        render json: invalid.record.errors, status: :unprocessable_entity
-        false
-      end
+      line_client = get_line_bot_client
+      response = line_client.push_message(@line_recepient_id, message)
     end
 end
