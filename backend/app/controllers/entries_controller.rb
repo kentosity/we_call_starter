@@ -10,7 +10,7 @@ class EntriesController < ApplicationController
       text: "#{fullname}様\n\nお問い合わせを受け付けました!"
     }
 
-    unless @entry.save
+    if @entry.save!
       render json: @entry.errors, status: :unprocessable_entity and return
     end
 
@@ -18,7 +18,7 @@ class EntriesController < ApplicationController
     line_client = get_line_bot_client
     line_recepient_id = get_profile_from_access_token(@entry.uid)
     response = line_client.push_message(line_recepient_id, message)
-    
+
     render status: :created, json: @entry
   end
 

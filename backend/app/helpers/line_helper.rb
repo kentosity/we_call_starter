@@ -17,9 +17,9 @@ module LineHelper
 
         client = HTTPClient.new
         response = client.get(url, header: header)
-        jsonedBody = JSON.parse(response.body)
+        jsoned_body = JSON.parse(response.body)
 
-        return jsonedBody['userId']
+        return jsoned_body['userId']
     end 
 
     
