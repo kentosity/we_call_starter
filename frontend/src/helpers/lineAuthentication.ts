@@ -15,7 +15,12 @@ export const authorizeWithLine = async () => {
   }
 };
 
-export const getLineProfile = async () => {
-  const profile = await liff.getProfile();
-  return profile;
+// export const getLineProfile = async () => {
+//   const profile = await liff.getProfile();
+//   return profile;
+// };
+
+export const getAccessToken = () => {
+  const accessToken = liff.getAccessToken();
+  return accessToken;
 };

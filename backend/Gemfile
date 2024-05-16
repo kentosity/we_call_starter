@@ -20,9 +20,10 @@ gem "jbuilder"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# lineでメッセージを送るため＋環境変数の読み込み
+# lineでメッセージを送るため＋環境変数の読み込み+外部apiの利用
 gem 'line-bot-api'
 gem 'dotenv-rails'
+gem 'httpclient'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -1,4 +1,4 @@
-require 'line/bot'
+include LineHelper
 
 class EntriesController < ApplicationController
   def create
@@ -10,15 +10,16 @@ class EntriesController < ApplicationController
       text: "#{fullname}様\n\nお問い合わせを受け付けました!"
     }
 
-    if @entry.save
-      # uid を使用してメッセージを送信
-      response = line_client.push_message(@entry.uid, message)
-      logger.debug(response)
-      render status: :created, json: @entry
-    else
-      render json: @entry.errors, status: :unprocessable_entity
+    unless @entry.save
+      render json: @entry.errors, status: :unprocessable_entity and return
     end
 
+    
+    line_client = get_line_bot_client
+    line_recepient_id = get_profile_from_access_token(@entry.uid)
+    response = line_client.push_message(line_recepient_id, message)
+    
+    render status: :created, json: @entry
   end
 
   private
@@ -26,12 +27,4 @@ class EntriesController < ApplicationController
     def entry_params
       params.require(:entry).permit(:uid, :surname, :name, :surnameKana, :nameKana, :gender, :birthday, :prefecture, :address, :email)
     end
-
-    # line botに設定
-    def line_client
-      Line::Bot::Client.new { |config|
-        config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
-        config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
-      }
-    end 
 end
