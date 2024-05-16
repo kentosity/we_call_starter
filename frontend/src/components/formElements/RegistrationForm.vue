@@ -13,7 +13,7 @@ import EmailInput from '../formElements/EmailInput.vue'
 import Caution from '../Caution.vue'
 import Submit from '../Submit.vue'
 
-import { useFormStore } from '../../store';
+import { useFormStore } from '../../stores/registrationFormStore';
 const router = useRouter()
 const formStore = useFormStore()
 
