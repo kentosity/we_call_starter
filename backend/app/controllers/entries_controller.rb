@@ -3,7 +3,7 @@ include LineHelper
 
 class EntriesController < ApplicationController
   before_action :validate_user, only: [:show, :create, :update, :destroy]
-  before_action :find_entry_by_recepient_id, only: [:show, :create, :update, :destroy]
+  before_action :find_entry_by_recepient_id, only: [:show, :update, :destroy]
 
   def show
     if @entry.nil?
@@ -15,17 +15,16 @@ class EntriesController < ApplicationController
   end
 
   def create
-    @entry = Entry.new(entry_params.merge(uid: @line_recepient_id))    
-    
     if @entry.present?
       render json: { error: 'You already have an entry' }, status: :not_acceptable
       return
     end
 
+    @entry = Entry.new(entry_params.merge(uid: @line_recepient_id))    
+
     begin
       @entry.save!
-      entry_model = Entry.new()
-      entry_model.notify_user_of_change(@entry)
+      notify_user_of_change(@entry)
       render json: @entry, status: :ok
     rescue ActiveRecord::RecordInvalid => invalid
       render json: invalid.record.errors, status: :unprocessable_entity
@@ -39,8 +38,7 @@ class EntriesController < ApplicationController
     end
 
     if @entry.update(entry_params)
-      entry_model = Entry.new()
-      entry_model.notify_user_of_change(@entry)
+      notify_user_of_change(@entry)
       render json: @entry, status: :ok
     else
       render json: @entry.errors, status: :unprocessable_entity
@@ -85,9 +83,13 @@ class EntriesController < ApplicationController
           render json: { error: 'Failed to retrieve line id from the access token provided' }, status: :unprocessable_entity
           return
       end
-  end
+    end
 
-  def find_entry_by_recepient_id
-      @entry = Entry.find_by(uid: @line_recepient_id)
-  end
+    def find_entry_by_recepient_id
+        @entry = Entry.find_by(uid: @line_recepient_id)
+    end
+
+    def notify_user_of_change(entry)
+      Entry.notify_user_of_change(entry, get_line_bot_client)
+    end
 end
