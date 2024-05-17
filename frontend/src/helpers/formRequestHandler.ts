@@ -17,7 +17,7 @@ export const retrieveExistingEntry = async (
   try {
     const { data } = await axios.get<FormEntry>(endpoint, config);
     const birthday = convertBirthday2Number(data.birthday);
-    // uidはクライアント側では利用しない
+    // uidはクライアント側では利用しないため、分割代入をして放置
     const { uid, ...rest } = data;
     const response = {
       ...rest,

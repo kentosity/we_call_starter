@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouteLocationRaw, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 
 import NameInput from '@/components/formElements/NameInput.vue'
@@ -14,11 +13,11 @@ import Submit from '@/components/Submit.vue'
 
 import { useFormStore } from '@/stores/registrationFormStore'
 import { retrieveAccessToken } from '@/helpers/lineAuthentication'
-import { createNewEntry, retrieveExistingEntry, updateExistingEntry } from '@/helpers/formRequestHandler'
+import { retrieveExistingEntry } from '@/helpers/formRequestHandler'
+import { submitCreateForm, submitUpdateForm } from '@/helpers/formSubmitHandler'
 
-const router = useRouter()
-const formStore = useFormStore()
 const accessToken = retrieveAccessToken()
+const formStore = useFormStore()
 const requestError = ref('')
 let hasRecord = false
 
@@ -30,30 +29,13 @@ onMounted(async () => {
     hasRecord = true
 })
 
-const handleFormInput = async () => {
-    let routeLocation: RouteLocationRaw = {
-        path: '/result',
-        query: undefined
-    }
-    const destinationPath = '/result'
-
+const handleFormSubmit = async () => {
     if (hasRecord) {
-        const updatedData = await updateExistingEntry(accessToken, formStore)
-        if (updatedData === null) return requestError.value = 'アップデートに失敗しました'
-
-        return router.push({
-            path: destinationPath,
-            query: updatedData
-        })
+        submitUpdateForm(accessToken, requestError)
+        return
     } 
 
-    const createdData = await createNewEntry(accessToken, formStore)
-    if (createdData === null) return requestError.value = '作成に失敗しました'
-    routeLocation.query = createdData || undefined
-    router.push({
-        path: destinationPath,
-        query: createdData
-    })
+    submitCreateForm(accessToken, requestError)
 }
 </script>
 
@@ -77,6 +59,12 @@ const handleFormInput = async () => {
 
         <p v-if="requestError" class="error-message">{{ requestError }}</p>
 
-        <Submit @submit="handleFormInput" />
+        <Submit @submit="handleFormSubmit" />
     </form>
 </template>
+<style>
+.error-message {
+    font-size: 0.8rem;
+    color: red;
+}
+</style>
