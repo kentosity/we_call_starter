@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { StateInterface, useFormStore } from '../store';
+import { useFormStore } from '@/stores/registrationFormStore';
+import { RegistrationFormState } from '@/types';
 
 const props = defineProps<{
     id: string
     label?: string
     type: 'text' | 'radio' | 'email' | 'number',
-    model: keyof StateInterface
+    model: keyof RegistrationFormState
 }>()
 
 const formStore = useFormStore()

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Row from './FormRow.vue'
+import Input from '../Input.vue'
 </script>
 
 <template>

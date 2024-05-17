@@ -1,32 +1,46 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { onMounted, ref } from 'vue'
 
-import NameInput from '../formElements/NameInput.vue'
-import NameKanaInput from '../formElements/NameKanaInput.vue'
-import GenderInput from '../formElements/GenderInput.vue'
-import BirthdayInput from '../formElements/BirthdayInput.vue'
-import PrefectureInput from '../formElements/PrefectureInput.vue'
-import AddressInput from '../formElements/AddressInput.vue'
-import EmailInput from '../formElements/EmailInput.vue'
+import NameInput from '@/components/formElements/NameInput.vue'
+import NameKanaInput from '@/components/formElements/NameKanaInput.vue'
+import GenderInput from '@/components/formElements/GenderInput.vue'
+import BirthdayInput from '@/components/formElements/BirthdayInput.vue'
+import PrefectureInput from '@/components/formElements/PrefectureInput.vue'
+import AddressInput from '@/components/formElements/AddressInput.vue'
+import EmailInput from '@/components/formElements/EmailInput.vue'
+import Caution from '@/components/Caution.vue'
+import Submit from '@/components/Submit.vue'
 
-import Caution from '../Caution.vue'
-import Submit from '../Submit.vue'
+import { useFormStore } from '@/stores/registrationFormStore'
+import { retrieveAccessToken } from '@/helpers/lineAuthentication'
+import { retrieveExistingEntry } from '@/helpers/formRequestHandler'
+import { submitCreateForm, submitUpdateForm } from '@/helpers/formSubmitHandler'
+import { RouteLocationPathRaw } from 'vue-router'
+import { router } from '@/router'
 
-import { useFormStore } from '../../store';
-const router = useRouter()
+const accessToken = retrieveAccessToken()
 const formStore = useFormStore()
+const requestError = ref('')
+let alreadyHasEntry = false
 
-async function handleFormInput() {
-    const currentState = formStore.$state
-    const birthday = `${currentState.year}-${currentState.month}-${currentState.date}`
+onMounted(async () => {
+    const data = await retrieveExistingEntry(accessToken)
+    if (data === null) return
 
-    const res = await axios.post('/api/entries', {
-        ...currentState,
-        birthday
-    })
+    formStore.updateData(data)
+    alreadyHasEntry = true
+})
 
-    router.push({ path: '/result', query: res.data })
+const handleFormSubmit = async () => {
+    let destination: RouteLocationPathRaw | null = null
+
+    if (alreadyHasEntry) {
+        destination = await submitUpdateForm(accessToken, requestError)
+    } else {
+        destination = await submitCreateForm(accessToken, requestError)
+    }
+
+    if (destination) router.push(destination)
 }
 </script>
 
@@ -48,6 +62,14 @@ async function handleFormInput() {
 
         <Caution :msg="'本イベントに関して、ご連絡させていただく可能性がございます。'" />
 
-        <Submit @submit="handleFormInput" />
+        <p v-if="requestError" class="error-message">{{ requestError }}</p>
+
+        <Submit @submit="handleFormSubmit" />
     </form>
 </template>
+<style>
+.error-message {
+    font-size: 0.8rem;
+    color: red;
+}
+</style>
