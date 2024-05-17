@@ -15,7 +15,10 @@ export const authorizeWithLine = async () => {
   }
 };
 
-export const getAccessToken = () => {
+export const retrieveAccessToken = (): string => {
   const accessToken = liff.getAccessToken();
-  return accessToken;
+  if (accessToken === null) liff.login();
+
+  // liffのinitializeが先なのでaccessTokenがないことはない
+  return accessToken!;
 };

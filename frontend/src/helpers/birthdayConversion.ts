@@ -3,11 +3,12 @@ import { RegistrationFormState } from "@/types";
 const divider = "-";
 
 export const convertBirthday2Number = (data: string) => {
+  // birthdayがない、誤っている場合は考えない
   const [year, month, date] = data.split(divider);
   return {
-    year,
-    month,
-    date,
+    year: +year,
+    month: +month,
+    date: +date,
   };
 };
 
