@@ -3,7 +3,7 @@ include LineHelper
 
 class EntriesController < ApplicationController
   before_action :validate_user, only: [:show, :create, :update, :destroy]
-  before_action :find_entry_by_recepient_id, only: [:show, :update, :destroy]
+  before_action :find_entry_by_recepient_id, only: [:show, :create, :update, :destroy]
 
   def show
     if @entry.nil?
@@ -15,8 +15,12 @@ class EntriesController < ApplicationController
   end
 
   def create
-    @entry = Entry.new(entry_params.merge(uid: @line_recepient_id))
+    @entry = Entry.new(entry_params.merge(uid: @line_recepient_id))    
     
+    if @entry.present?
+      render json: { error: 'You already have an entry' }, status: :not_acceptable
+      return
+    end
 
     begin
       @entry.save!

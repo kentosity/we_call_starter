@@ -19,15 +19,15 @@ import { createNewEntry, retrieveExistingEntry, updateExistingEntry } from '@/he
 const router = useRouter()
 const formStore = useFormStore()
 const accessToken = retrieveAccessToken()
-const hasRecord = ref(false)
 const requestError = ref('')
+let hasRecord = false
 
 onMounted(async () => {
     const data = await retrieveExistingEntry(accessToken)
     if (data === null) return
 
     formStore.updateData(data)
-    hasRecord.value = true
+    hasRecord = true
 })
 
 const handleFormInput = async () => {
@@ -35,18 +35,25 @@ const handleFormInput = async () => {
         path: '/result',
         query: undefined
     }
+    const destinationPath = '/result'
 
-    if (hasRecord.value) {
+    if (hasRecord) {
         const updatedData = await updateExistingEntry(accessToken, formStore)
         if (updatedData === null) return requestError.value = 'アップデートに失敗しました'
-        routeLocation.query = updatedData
-    }
+
+        return router.push({
+            path: destinationPath,
+            query: updatedData
+        })
+    } 
 
     const createdData = await createNewEntry(accessToken, formStore)
     if (createdData === null) return requestError.value = '作成に失敗しました'
     routeLocation.query = createdData || undefined
-
-    router.push(routeLocation)
+    router.push({
+        path: destinationPath,
+        query: createdData
+    })
 }
 </script>
 
