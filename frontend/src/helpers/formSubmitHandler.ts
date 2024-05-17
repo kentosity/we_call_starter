@@ -1,10 +1,8 @@
-import { RouteLocationRaw, useRouter } from "vue-router";
+import { RouteLocationRaw } from "vue-router";
 
 import { createNewEntry, updateExistingEntry } from "./formRequestHandler";
 import { useFormStore } from "@/stores/registrationFormStore";
 import { Ref } from "vue";
-
-const router = useRouter();
 
 // piniaのinitializeを待つ必要があるので、globalで呼べない
 const getInitializedPinia = () => useFormStore();
@@ -23,11 +21,11 @@ export const submitUpdateForm = async (
 
   if (updatedData === null) {
     requestErrorRef.value = "アップデートに失敗しました。";
-    return;
+    return null;
   }
 
   routeLocation.query = updatedData;
-  router.push(routeLocation);
+  return routeLocation;
 };
 
 export const submitCreateForm = async (
@@ -36,11 +34,12 @@ export const submitCreateForm = async (
 ) => {
   const formStore = getInitializedPinia();
   const createdData = await createNewEntry(accessToken, formStore);
+
   if (createdData === null) {
     requestErrorRef.value = "作成に失敗しました";
-    return;
+    return null;
   }
 
   routeLocation.query = createdData;
-  router.push(routeLocation);
+  return routeLocation;
 };

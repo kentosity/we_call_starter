@@ -15,27 +15,32 @@ import { useFormStore } from '@/stores/registrationFormStore'
 import { retrieveAccessToken } from '@/helpers/lineAuthentication'
 import { retrieveExistingEntry } from '@/helpers/formRequestHandler'
 import { submitCreateForm, submitUpdateForm } from '@/helpers/formSubmitHandler'
+import { RouteLocationPathRaw } from 'vue-router'
+import { router } from '@/router'
 
 const accessToken = retrieveAccessToken()
 const formStore = useFormStore()
 const requestError = ref('')
-let hasRecord = false
+let alreadyHasEntry = false
 
 onMounted(async () => {
     const data = await retrieveExistingEntry(accessToken)
     if (data === null) return
 
     formStore.updateData(data)
-    hasRecord = true
+    alreadyHasEntry = true
 })
 
 const handleFormSubmit = async () => {
-    if (hasRecord) {
-        submitUpdateForm(accessToken, requestError)
-        return
-    } 
+    let destination: RouteLocationPathRaw | null = null
 
-    submitCreateForm(accessToken, requestError)
+    if (alreadyHasEntry) {
+        destination = await submitUpdateForm(accessToken, requestError)
+    } else {
+        destination = await submitCreateForm(accessToken, requestError)
+    }
+
+    if (destination) router.push(destination)
 }
 </script>
 
